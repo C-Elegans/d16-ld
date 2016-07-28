@@ -45,4 +45,5 @@ typedef struct {
     a_reloc_entry* data_relocs;
     char* strings;
 } object_file_entry;
+void print_hex(uint16_t* data, int size);
 #endif //D16_LD_MAIN_H
