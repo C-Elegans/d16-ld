@@ -31,13 +31,13 @@ int main(int argc, char** argv){
             object_file_entry entry;
             memset(&entry,0, sizeof(object_file_entry));
             fread(&header, 1, sizeof(aout_header),input);
-            printf("Text size: %d bytes\n",header.a_text);
+
             entry.header = header;
             if(header.a_text > 0) {
                 entry.text = malloc(header.a_text);
                 //fseek(input, sizeof(header), SEEK_SET);
                 fread(entry.text, header.a_text, 1, input);
-                print_hex(entry.text, header.a_text);
+
             }
             if(header.a_data >0){
                 entry.data = malloc(header.a_data);

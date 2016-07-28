@@ -14,7 +14,7 @@ void add_symbols(object_file_entry* entry){
         memcpy(symb,symbs, sizeof(a_symbol_entry));
         symb->value += entry->text_start_offset;
         int str_offset = symb ->name_offset;
-        printf("Adding symbol %s\n",entry->strings + str_offset);
+        //printf("Adding symbol %s\n",entry->strings + str_offset);
         g_hash_table_insert(symbol_table,entry->strings+str_offset,symb);
         symbs++;
     }
@@ -25,7 +25,7 @@ int resolve_text_relocations(object_file_entry* entry, uint16_t* buffer){
     for(int i=0;i<entry->header.a_trsize/ sizeof(a_reloc_entry);i++){
         char* reloc_str = relocs->index + entry->strings;
         int reloc_addr = relocs->address+entry->text_start_offset;
-        printf("Resolving relocation for %s at 0x%x\n",reloc_str,reloc_addr);
+        //printf("Resolving relocation for %s at 0x%x\n",reloc_str,reloc_addr);
         a_symbol_entry* symb = g_hash_table_lookup(symbol_table,reloc_str);
         if(symb == NULL){
             fprintf(stderr,"Undefined symbols: %s",reloc_str);
@@ -61,8 +61,8 @@ void link_objects(GArray* objects, FILE* output){
         memcpy(output_buffer+index/2,entry->data,entry->header.a_data);
         index += entry->header.a_data;
     }
-    printf("After copying\n");
-    print_hex(output_buffer,output_size);
+
+
     for(int i=0;i<objects->len;i++) {
         object_file_entry *entry = &g_array_index(objects, object_file_entry, i);
         add_symbols(entry);
@@ -78,6 +78,6 @@ void link_objects(GArray* objects, FILE* output){
     if(status != 0){
         exit(-1);
     }
-    print_hex(output_buffer,output_size);
     fwrite(output_buffer,output_size,1,output);
+    printf("Program length: %d bytes\n",output_size);
 }
