@@ -3,7 +3,7 @@
 This application is built the same way as [d16][]:
 
 ```
-cd cmake
+cd build
 cmake ..; make
 ./d16-ld -o <output>
 ```
