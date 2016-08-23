@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(d16_ld)
+set(CMAKE_C_FLAGS_DEBUG "-DDEBUG")
+set(CMAKE_C_FLAGS "-std=c99 -Wall -Werror")
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 find_package(GLib REQUIRED)
