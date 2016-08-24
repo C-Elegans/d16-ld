@@ -5,7 +5,7 @@
 #include <stdint.h>
 #ifndef D16_LD_MAIN_H
 #define D16_LD_MAIN_H
-
+#define A_MAGIC 0x0107ffff
 
 typedef struct _aout_header {
     uint32_t a_magic;

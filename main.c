@@ -31,7 +31,10 @@ int main(int argc, char** argv){
             object_file_entry entry;
             memset(&entry,0, sizeof(object_file_entry));
             fread(&header, 1, sizeof(aout_header),input);
-
+            if(header.a_magic != A_MAGIC){
+                fprintf(stderr, "File \"%s\"is not in d16 a.out format. Perhaps you provided a binary?\nMagic Number: 0x%x",argv[optind],header.a_magic);
+                exit(1);
+            }
             entry.header = header;
             if(header.a_text > 0) {
                 entry.text = malloc(header.a_text);
