@@ -23,18 +23,23 @@ int resolve_text_relocations(object_file_entry* entry, uint16_t* buffer){
     int ret = 0;
     const a_reloc_entry * relocs = entry->text_relocs;
     for(int i=0;i<entry->header.a_trsize/ sizeof(a_reloc_entry);i++){
-        char* reloc_str = relocs->index + entry->strings;
-        int reloc_addr = relocs->address+entry->text_start_offset;
+        if(relocs->extern_entry) {
+            char *reloc_str = relocs->index + entry->strings;
+            int reloc_addr = relocs->address + entry->text_start_offset;
 #ifdef DEBUG
-        printf("Resolving relocation for %s at 0x%x\n",reloc_str,reloc_addr);
+            printf("Resolving relocation for %s at 0x%x\n", reloc_str, reloc_addr);
 #endif
-        a_symbol_entry* symb = g_hash_table_lookup(symbol_table,reloc_str);
-        if(symb == NULL){
-            fprintf(stderr,"Undefined symbols: %s\n",reloc_str);
-            ret = -1;
+            a_symbol_entry *symb = g_hash_table_lookup(symbol_table, reloc_str);
+            if(symb == NULL) {
+                fprintf(stderr, "Undefined symbols: %s\n", reloc_str);
+                ret = -1;
+            } else {
+                uint16_t addr = (uint16_t) symb->value;
+                *(buffer + reloc_addr / 2 + 1) = addr;
+            }
         }else{
-            uint16_t addr = (uint16_t)symb->value;
-            *(buffer+reloc_addr/2+1) = addr;
+            int reloc_addr = relocs->address + entry->text_start_offset;
+            *(buffer + reloc_addr / 2 + 1) += entry->text_start_offset;
         }
         relocs++;
     }
