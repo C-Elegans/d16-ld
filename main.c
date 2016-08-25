@@ -14,6 +14,7 @@ void print_hex(uint16_t* data, int size){
 }
 int main(int argc, char** argv){
     int c;
+    setenv("POSIXLY_CORRECT", "1", 1);
     opterr = 0;
     object_files = g_array_new(FALSE,FALSE, sizeof(object_file_entry));
     FILE* output = NULL;
