@@ -5,7 +5,7 @@
 #include <string.h>
 #include "link.h"
 GArray* object_files;
-
+extern int setenv(const char*, const char*, int);
 void print_hex(uint16_t* data, int size){
     for(int i=0;i<size;i+=2){
         printf("0x%x\n",*data);
