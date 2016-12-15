@@ -28,6 +28,10 @@ int main(int argc, char** argv){
             }
         }else{ // non option argument
             FILE* input = fopen(argv[optind],"rb");
+            if(input == NULL){
+                fprintf(stderr, "Could not open file: %s\n",argv[optind]);
+                exit(1);
+            }
             aout_header header;
             object_file_entry entry;
             memset(&entry,0, sizeof(object_file_entry));
