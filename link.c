@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 GHashTable* symbol_table = NULL;
+extern int start_address;
 void add_symbols(object_file_entry* entry){
     const a_symbol_entry* symbs = entry->syms;
     for(int i=0; i<entry->header.a_syms/ sizeof(a_symbol_entry);i++){
@@ -34,12 +35,12 @@ int resolve_text_relocations(object_file_entry* entry, uint16_t* buffer){
                 fprintf(stderr, "Undefined symbols: %s\n", reloc_str);
                 ret = -1;
             } else {
-                uint16_t addr = (uint16_t) symb->value;
+                uint16_t addr = (uint16_t) symb->value + start_address;
                 *(buffer + reloc_addr / 2 + 1) = addr;
             }
         }else{
             int reloc_addr = relocs->address + entry->text_start_offset;
-            *(buffer + reloc_addr / 2 + 1) += entry->text_start_offset;
+            *(buffer + reloc_addr / 2 + 1) += entry->text_start_offset + start_address;
         }
         relocs++;
     }

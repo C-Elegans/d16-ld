@@ -5,6 +5,7 @@
 #include <string.h>
 #include "link.h"
 GArray* object_files;
+int start_address = 0;
 extern int setenv(const char*, const char*, int);
 void print_hex(uint16_t* data, int size){
     for(int i=0;i<size;i+=2){
@@ -19,10 +20,13 @@ int main(int argc, char** argv){
     object_files = g_array_new(FALSE,FALSE, sizeof(object_file_entry));
     FILE* output = NULL;
     while(optind < argc){
-        if((c=getopt(argc,argv,"o:"))!= -1){
+        if((c=getopt(argc,argv,"o:s:"))!= -1){
             switch(c){
                 case 'o':
                     output = fopen(optarg,"wb");
+                    break;
+                case 's':
+                    start_address = strtol(optarg,NULL,0);
                     break;
 
             }
@@ -80,7 +84,7 @@ int main(int argc, char** argv){
         fprintf(stderr,"d16-ld: No output file specified\n");
         exit(-1);
     }
-
+    printf("Linking objects at address: %x\n",start_address);
     link_objects(object_files,output);
 
 
